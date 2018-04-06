@@ -25,14 +25,13 @@ public class FilmQueryApp {
     Scanner input = new Scanner(System.in);
     System.out.println("Welcome to the BMYNHO - Best Movies You've Never Heard Of - database! Enter a choice to use the database!");
     System.out.println("What would you like to do?");
-   while(true) {
     startUserInterface(input);
-    
-   }
+    input.close();
   }
 
   private void startUserInterface(Scanner input) {
 	  
+	 while(true) { 
 	  menuOfOptions();
 	  int selection = input.nextInt();
 	  
@@ -49,6 +48,7 @@ public class FilmQueryApp {
 		  input.nextLine();
 		  System.out.println("Gimmie a search term and I'll find something!");
 		  String searchTerm = input.nextLine();
+		  System.out.println("Searching . . .");
 		  break;
 	  case 3:
 		  System.out.println("K Bai!");
@@ -57,6 +57,7 @@ public class FilmQueryApp {
 		  System.out.println("Please Enter a Valid Selection!");
 		  break;
 	  }
+	 }
   }
 
   private void menuOfOptions() {
@@ -75,7 +76,7 @@ public class FilmQueryApp {
 	  String rating = film.getRating();
 	  String description = film.getDescription();
 	  System.out.println("Film Found!");
-	  System.out.println("Title of film: " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description);
+	  System.out.println("Title of film: " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description + "\n\n");
   }
   
 
