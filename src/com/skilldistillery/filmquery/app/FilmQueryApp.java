@@ -12,36 +12,47 @@ public class FilmQueryApp {
 
   public static void main(String[] args) {
     FilmQueryApp app = new FilmQueryApp();
-    app.test();
+//    app.test();
     app.launch();
   }
 
-  private void test() {
-    Film film = db.getFilmById(1);
-    System.out.println(film);
-  }
+//  private void test() {
+//    Film film = db.getFilmById(1);
+//    System.out.println(film);
+//  }
 
   private void launch() {
     Scanner input = new Scanner(System.in);
     System.out.println("Welcome to the BMYNHO - Best Movies You've Never Heard Of - database! Enter a choice to use the database!");
     System.out.println("What would you like to do?");
-
+   while(true) {
+    startUserInterface(input);
     
-    input.close();
+   }
   }
 
   private void startUserInterface(Scanner input) {
 	  
+	  menuOfOptions();
 	  int selection = input.nextInt();
 	  
 	  switch (selection) {
 	  case 1:
+		  input.nextLine();
+		  System.out.print("Please enter a film ID: ");
+		  int filmId = input.nextInt();
+		  Film film = db.getFilmById(filmId);
+		  printOutAFilm(film);
+		  System.out.println("Make Another Choice!");
 		  break;
 	  case 2:
+		  input.nextLine();
+		  System.out.println("Gimmie a search term and I'll find something!");
+		  String searchTerm = input.nextLine();
 		  break;
 	  case 3:
 		  System.out.println("K Bai!");
-		  System.exit(0);
+		  return;
 	  default:
 		  System.out.println("Please Enter a Valid Selection!");
 		  break;
@@ -53,6 +64,21 @@ public class FilmQueryApp {
 	  System.out.println("2: Lookup a film by a search keyword");
 	  System.out.println("3: Exit");
   }
+  
+  private void printOutAFilm(Film film) {
+	  if(film == null) {
+		  System.out.println("Didn't find a film, try again");
+		  return;
+	  }
+	  String title = film.getTitle();
+	  int year = film.getReleaseYear();
+	  String rating = film.getRating();
+	  String description = film.getDescription();
+	  System.out.println("Film Found!");
+	  System.out.println("Title of film: " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description);
+  }
+  
+
 }
 
 
