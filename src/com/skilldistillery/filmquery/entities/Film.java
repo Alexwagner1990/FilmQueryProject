@@ -9,13 +9,20 @@ public class Film {
 	private String description;
 	private int releaseYear;
 	private int languageId;
-	private String rentalDuration; //might make this a localdatetime or period/duration
+	private String rentalDuration; 
 	private double rentalRate;
 	private int length;
 	private double replacementCost;
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> cast;
+	private String languageName;
+	
+	
+	public Film() {
+		
+	}
+	
 	public List<Actor> getCast() {
 		return cast;
 	}
@@ -24,11 +31,7 @@ public class Film {
 		this.cast = cast;
 	}
 
-	private String languageName;
 	
-	public Film() {
-		
-	}
 	
 	public Film(int id, String title, String description, int releaseYear, int languageId, String rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures, List<Actor> castList) {

@@ -10,6 +10,8 @@ import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.FilmCategory;
+import com.skilldistillery.filmquery.entities.InventoryItem;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 
@@ -191,6 +193,77 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				rs.close();
 				return null;
 			}
+		} catch (SQLException e) {
+			System.out.println("Database problem. Dunno what to tell ya.");
+			return null;
+		}
+	}
+	
+	public FilmCategory getFilmCategory(Film filmWithNoDetails) {
+		FilmCategory category = new FilmCategory();
+		ResultSet rs;
+		Connection conn;
+		PreparedStatement stmt;
+		try {
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "select c.name from film_category fc join category c on fc.category_id = c.id where fc.category_id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmWithNoDetails.getId());
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				String categoryName = rs.getString(1);
+				category.setCategoryName(categoryName);
+				rs.close();
+				conn.close();
+				stmt.close();
+				return category;
+			} else {
+				conn.close();
+				stmt.close();
+				rs.close();
+				return null;
+			}
+		} catch (SQLException e) {
+			System.out.println("Database problem. Dunno what to tell ya.");
+			return null;
+		}
+
+	}
+
+	@Override
+	public List<InventoryItem> getInventoryItem(Film filmWithNoInventoryDetails) {
+		List<InventoryItem> inInventory = new ArrayList<>();
+		InventoryItem invItem = null;
+		ResultSet rs;
+		Connection conn;
+		PreparedStatement stmt;
+		try {
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "select i.id, i.media_condition from inventory_item i where i.film_id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmWithNoInventoryDetails.getId());
+			rs = stmt.executeQuery();
+			boolean checkIfAnyInStock = false;
+			while (rs.next()) {
+				checkIfAnyInStock = true;
+				int invId  = rs.getInt(1);
+				String mediaCondition = rs.getString(2);
+				invItem = new InventoryItem();
+				invItem.setId(invId);
+				invItem.setMediaCondition(mediaCondition);
+				inInventory.add(invItem);
+			} 
+			
+			if(!checkIfAnyInStock) {
+				conn.close();
+				stmt.close();
+				rs.close();
+				return null;
+			}
+			rs.close();
+			conn.close();
+			stmt.close();
+			return inInventory;
 		} catch (SQLException e) {
 			System.out.println("Database problem. Dunno what to tell ya.");
 			return null;
