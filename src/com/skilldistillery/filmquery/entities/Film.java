@@ -16,6 +16,14 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> cast;
+	public List<Actor> getCast() {
+		return cast;
+	}
+
+	public void setCast(List<Actor> cast) {
+		this.cast = cast;
+	}
+
 	private String languageName;
 	
 	public Film() {

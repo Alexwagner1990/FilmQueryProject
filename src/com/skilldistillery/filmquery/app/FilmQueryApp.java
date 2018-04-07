@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
+import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class FilmQueryApp {
@@ -43,7 +44,7 @@ public class FilmQueryApp {
 		  int filmId = input.nextInt();
 		  Film film = db.getFilmById(filmId);
 		  printOutAFilm(film);
-		  System.out.println("Make Another Choice!");
+		  System.out.println("Make Another Choice!\n");
 		  break;
 	  case 2:
 		  input.nextLine();
@@ -52,7 +53,7 @@ public class FilmQueryApp {
 		  System.out.println("Searching . . .");
 		  List<Film> foundFilmList = db.getFilmBySearchTerm(searchTerm);
 		  printOutSeveralFilms(foundFilmList);
-		  System.out.println("Make Another Choice!");
+		  System.out.println("Make Another Choice!\n");
 		  break;
 	  case 3:
 		  System.out.println("K Bai!");
@@ -81,10 +82,19 @@ public class FilmQueryApp {
 	  String rating = film.getRating();
 	  String description = film.getDescription();
 	  String languageFull = film.getLanguageName();
+	  List<Actor> castOfFilm = film.getCast();
 	  
-	  
-	  
-	  System.out.println("Title of film (" + languageFull + "): " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description + "\n\n");
+	  System.out.println("Title of film (" + languageFull + "): " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description + "\n");
+	  System.out.print("Cast List for " + title + ": ");
+	  for (int i = 0; i < castOfFilm.size(); i++) {
+		  Actor a = castOfFilm.get(i);
+		  String actorName = a.getFirstName() + " " + a.getLastName();
+		  System.out.print(actorName);
+		  if (i < (castOfFilm.size() - 1)) {
+			  System.out.print(", ");
+		  }
+	}
+	  System.out.println("\n");
   }
   
   private void printOutSeveralFilms(List<Film> filmListQuery) {
