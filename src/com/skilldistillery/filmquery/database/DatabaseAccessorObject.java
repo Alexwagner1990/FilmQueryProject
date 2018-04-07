@@ -13,6 +13,16 @@ import com.skilldistillery.filmquery.entities.Film;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 
+	static {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			System.err.println("I can't load the database driver. I dunno what to tell ya man.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid";
 	private static final String user = "student";
 	private static final String pass = "student";
@@ -39,7 +49,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				stmt.close();
 				return f;
 			} else {
-				System.out.println("Film not found, try a different ID or don't I'm not your dad");
+//				System.out.println("Film not found, try a different ID or don't I'm not your dad");
 				rs.close();
 				conn.close();
 				stmt.close();
@@ -69,7 +79,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				stmt.close();
 				return a;
 			} else {
-				System.out.println("Actor not found, try a different ID or don't I'm not your dad");
 				conn.close();
 				stmt.close();
 				rs.close();
@@ -99,7 +108,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				actorList.add(foundActor);
 			}
 			if (!checkIfIdFindsAnything) {
-				System.out.println("Data not found, try a different ID or don't I'm not your dad");
 				rs.close();
 				conn.close();
 				stmt.close();
@@ -109,7 +117,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			conn.close();
 			stmt.close();
 			return actorList;
-			
+
 		} catch (SQLException e) {
 			System.out.println("Database problem. Dunno what to tell ya.");
 			return null;
@@ -117,13 +125,75 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	}
 
-	static {
+	@Override
+	public List<Film> getFilmBySearchTerm(String search) {
+		ResultSet rs;
+		Connection conn;
+		PreparedStatement stmt;
+		DatabaseAccessorObject castGetter = new DatabaseAccessorObject();
+		List<Film> foundFilms = new ArrayList<>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			System.err.println("I can't load the database driver. I dunno what to tell ya man.");
-			e.printStackTrace();
-			System.exit(1);
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "select id, title, description, release_year, language_id, rental_duration, "
+					+ "rental_rate, length, replacement_cost, rating, special_features from film where title like ? or description like ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%" + search + "%");
+			stmt.setString(2, "%" + search + "%");
+			rs = stmt.executeQuery();
+			boolean didYouFindAFilm = false;
+			while (rs.next()) {
+				didYouFindAFilm = true;
+				Film f = new Film(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5),
+						rs.getString(6), rs.getDouble(7), rs.getInt(8), rs.getDouble(9), rs.getString(10),
+						rs.getString(11), castGetter.getActorsByFilmId(rs.getInt(1)));
+				foundFilms.add(f);
+			}
+			if (!didYouFindAFilm) {
+				conn.close();
+				stmt.close();
+				rs.close();
+				return null;
+			}
+			return foundFilms;
+		} catch (SQLException e) {
+			System.out.println("Database problem. Dunno what to tell ya.");
+			return null;
+		}
+
+	}
+
+	@Override
+	public Film getFilmWithLanguageName(Film filmWithoutLanguage) {
+		if (filmWithoutLanguage == null) {
+			return null;
+		}
+		int languageId = filmWithoutLanguage.getLanguageId();
+		
+		ResultSet rs;
+		Connection conn;
+		PreparedStatement stmt;
+		try {
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "select id, name from language where id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, languageId);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				String languageName = rs.getString(2);
+				filmWithoutLanguage.setLanguageName(languageName);
+				rs.close();
+				conn.close();
+				stmt.close();
+				return filmWithoutLanguage;
+			} else {
+				conn.close();
+				stmt.close();
+				rs.close();
+				return null;
+			}
+		} catch (SQLException e) {
+			System.out.println("Database problem. Dunno what to tell ya.");
+			return null;
 		}
 	}
 

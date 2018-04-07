@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.app;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
@@ -49,6 +50,9 @@ public class FilmQueryApp {
 		  System.out.println("Gimmie a search term and I'll find something!");
 		  String searchTerm = input.nextLine();
 		  System.out.println("Searching . . .");
+		  List<Film> foundFilmList = db.getFilmBySearchTerm(searchTerm);
+		  printOutSeveralFilms(foundFilmList);
+		  System.out.println("Make Another Choice!");
 		  break;
 	  case 3:
 		  System.out.println("K Bai!");
@@ -68,15 +72,32 @@ public class FilmQueryApp {
   
   private void printOutAFilm(Film film) {
 	  if(film == null) {
-		  System.out.println("Didn't find a film, try again");
+		  System.out.println("\n\nFilm not found, try a different search term or don't I'm not your dad \n\n");
 		  return;
 	  }
+	  db.getFilmWithLanguageName(film);
 	  String title = film.getTitle();
 	  int year = film.getReleaseYear();
 	  String rating = film.getRating();
 	  String description = film.getDescription();
-	  System.out.println("Film Found!");
-	  System.out.println("Title of film: " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description + "\n\n");
+	  String languageFull = film.getLanguageName();
+	  
+	  
+	  
+	  System.out.println("Title of film (" + languageFull + "): " + title + "\nYear " + title + " was released: " + year + "\n" + title + "'s rating: " + rating + "\n\n__________________________\n" + description + "\n\n");
+  }
+  
+  private void printOutSeveralFilms(List<Film> filmListQuery) {
+	  if(filmListQuery == null) {
+		  System.out.println("\n\nFilm not found, try a different search term or don't I'm not your dad \n\n");
+		  return;
+	  }
+	  
+	  for (int i = 0; i < filmListQuery.size(); i++) {
+		System.out.println("Result " + (i + 1) + ":\n****************************************\n ");
+		printOutAFilm(filmListQuery.get(i));
+		System.out.println("\n****************************************\n");
+	}
   }
   
 

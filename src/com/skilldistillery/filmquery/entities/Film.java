@@ -16,6 +16,11 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> cast;
+	private String languageName;
+	
+	public Film() {
+		
+	}
 	
 	public Film(int id, String title, String description, int releaseYear, int languageId, String rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures, List<Actor> castList) {
@@ -187,6 +192,14 @@ public class Film {
 		} else if (!title.equals(other.title))
 			return false;
 		return true;
+	}
+
+	public String getLanguageName() {
+		return languageName;
+	}
+
+	public void setLanguageName(String languageName) {
+		this.languageName = languageName;
 	}
 	
 	
