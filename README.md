@@ -2,15 +2,22 @@
 
 ### How to Run This Project
 
-This project is run from the FilmQueryApp class and utilizes the SD database.
+This project is run from the FilmQueryApp class and utilizes the SD films database table. 
  
 ### Project Description
 
-When the user starts the program, a menu loop starts with the option to find a film by id or by a keyword. 
+The year is 1997, and rumblings of a scrappy newcomer called "Netflix" have traditional brick-and-mortar video rental companies worried - but not "Love My 'Rents" video rental. They're betting their development dollars on a state-of-the-art database system that lets users get information on movies and inventory before going to the store. "Love My 'Rents" CEO Chuck Witherstein scoffs at the idea of cyberspace replacing movies, saying in an interview with Bloomberg, "Look, the Internet is useful for some things, but the Internet won't be able to replace everything, like funeral homes and movie rental stores." Be among the first to use "Love My 'Rents" newest database system!
+
+When the user starts the program, a menu loop starts with the option to find a film by id or by a keyword. If the first option is chosen, the user is then prompted to enter a video ID of a number from 1 to 1000. An error message is displayed if the user tries to enter a film ID that does not exist in the database. If a valid film is found, a description of the film with important information is displayed. The user then has the option to print out more details about the film or return to the main menu. If the user chooses to view more details, a full list of the film's information is printed. 
+
+From the main menu, the user can also choose to find films via a search term. The user types a text search term and films with titles or descriptions that match at least a portion of the search term are returned. The user may then choose to view the full list of details about the film by entering a film ID until the user decides to exit. 
 
 ### Lessons Learned
 
+I encountered lots of null pointer exceptions while developing and testing this project. Up to this point I haden't run into many null pointer exceptions because I had more control over creating non-null objects, and if I did encounter a null pointer exception it indicated that something in my code wasn't working correctly. As we work with databases more, I'll most certainly run into potential scenarios where objects may contain null values not because of a code error but because of a missing value in a database. As I move forward I won't just assume that, for example, a film must always have a category, because that's not necessarily true, and if it isn't I'll have to come up with a check to deal with that. I first ran into the issue after completing the minimum user stories and showing it to my girlfriend - she happened to search for one of three films that didn't have a cast list and thus ran into a null pointer exception! After implementing the category detail and running into similar null pointer exceptions, I knew right where to find the problem. Going forward, whenever I call a method on an object that depends on data from a database, I'm going to make sure I put in a check for if that object is null.
 
+I'm starting to get a better grasp of Java objects as they relate to databases. Jake keyed me into the idea that objects should contain only fields that correspond to columns of the corresponding database table, and at first blush that didn't make sense to me - after all, "Academy Dinosaur" would be in Japanese if I were to put it into a DVD player and watch it, so it made sense to me to give it a language name field. However, I only assumed that a film would have a language name (as opposed to a language id) because I pictured in my head a film object as an actual, physical video, when I should have been picturing the film as an entity completely defined by the parameters of the database. Imagining Java objects as actual real-world objects has really helped me understand how to conceptualize and use objects, but this project showed me that the metaphor has its limits. 
 
 ### Regrets/Things to Do Better Next Time
 
+I put the Language Name as a field of the film instead of as its own separate class. As I mentioned in the Lessons Learned section, I went with my own view on what a film was rather than what a film should have been as specified by the database table structure. By the time I realized my mistake, disentangling the field would have been more work than it was worth. Next time, I'll look to the database structure to map out the structure of my Java objects.
