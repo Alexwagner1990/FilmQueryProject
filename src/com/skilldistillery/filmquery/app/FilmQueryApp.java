@@ -28,7 +28,7 @@ public class FilmQueryApp {
 	private void launch() {
 		Scanner input = new Scanner(System.in);
 		System.out.println(
-				"Welcome to the BMYNHO - Best Movies You've Never Heard Of - database! Enter a choice to use the database!");
+				"Welcome to the \"Love My 'Rents\" (TM) video rental store movie database! \nGet information on a movie (even if we have the movie in stock!) before you even get in the car to drive to the video store!\n It's the way of the future! No other company offers this kind of movie rental convenience (not even Blockbuster)!\nEnter a choice to use the database!");
 		System.out.println("What would you like to do?");
 		startUserInterface(input);
 		input.close();
@@ -62,21 +62,39 @@ public class FilmQueryApp {
 				break;
 			case 2:
 				input.nextLine();
-				System.out.println("Gimmie a search term and I'll find something!");
+				System.out.println("Enter a search term to find movies by title or description:");
 				String searchTerm = input.nextLine();
 				System.out.println("Searching . . .");
 				List<Film> foundFilmList = db.getFilmBySearchTerm(searchTerm);
 				printOutSeveralFilms(foundFilmList);
+				if (foundFilmList != null) {
+					boolean checkIfTheyWantMoreDetails = false;
+					subMenuToGetMoreDetailsOnOneFilmOfMany();
+					int choice = input.nextInt();
+					if(choice == 1) {
+						checkIfTheyWantMoreDetails = true;
+					}
+					while(checkIfTheyWantMoreDetails){
+						System.out.println("Which film would you like more details on? (Enter a film ID or \"0\" to exit):");
+						int choiceOfId = input.nextInt();
+						if(choiceOfId == 0) {
+							checkIfTheyWantMoreDetails = false;
+						}
+						if(choiceOfId != 0) {
+							printOutAFilmWithAllDetails(db.getFilmById(choiceOfId));
+						}
+					}
+				}
 				System.out.println();
 				System.out.println("Make Another Choice!\n");
 
 				break;
 			case 3:
 				System.out.println(
-						"Thank you for using the BMYNHO database, although now that you HAVE heard of some of the\nmovies in this database you have depreciated its value slightly.\nI hope it was worth it!");
+						"Thank you for using the \"Love My 'Rents\" video rental store database. We at \"Love My 'Rents\" strive to provide you the very best in video rental services.\n We at \"Love My 'Rents\" also use time-tested business strategies, and while other video rental companies are busy chasing the next shiny new fad like video streaming,\nwe at \"Love My 'Rents\" will outlast them all by continuing to provide you, the customer, with the no-nonsense video rental brick-and-mortar stores you really desire.\n\nHave a nice day!");
 				return;
 			default:
-				System.out.println("Please Enter a Valid Selection! I gave ya three choices! It's not so hard!");
+				System.out.println("Please Enter a Valid Selection!");
 				break;
 			}
 		}
@@ -90,10 +108,11 @@ public class FilmQueryApp {
 
 	private void printOutAFilm(Film film) {
 		if (film == null) {
-			System.out.println("\n\nFilm not found, try a different search term or don't I'm not your dad \n\n");
+			System.out.println("\n\nFilm not found, try a different search term! \n\n");
 			return;
 		}
 		db.getFilmWithLanguageName(film);
+		int id = film.getId();
 		String title = film.getTitle();
 		int year = film.getReleaseYear();
 		String rating = film.getRating();
@@ -102,12 +121,12 @@ public class FilmQueryApp {
 		List<Actor> castOfFilm = film.getCast();
 
 		System.out.println(
-				"Title of film (" + languageFull + "): " + title + "\nYear " + title + " was released: " + year + "\n"
+				"Film ID: " + id + "\nTitle of film (" + languageFull + "): " + title + "\nYear " + title + " was released: " + year + "\n"
 						+ title + "'s rating: " + rating + "\n\n__________________________\n" + description + "\n");
 		System.out.print("Cast List for " + title + ": ");
 		if (film.getCast() == null) {
 			System.out.print(
-					"No Cast found. Weird. Must be one of those fruity Liberal Arts grad student film projects that asks the audience to grapple with\nthe true essence of a film by showing us a really boring movie. Don't know how else you have a movie without a cast.\n");
+					"N/A \n");
 			return;
 		}
 		for (int i = 0; i < castOfFilm.size(); i++) {
@@ -123,7 +142,7 @@ public class FilmQueryApp {
 
 	private void printOutAFilmWithAllDetails(Film film) {
 		if (film == null) {
-			System.out.println("\n\nFilm not found, try a different search term or don't I'm not your dad \n\n");
+			System.out.println("\n\nFilm not found, try a different search term! \n\n");
 			return;
 		}
 		db.getFilmWithLanguageName(film);
@@ -141,12 +160,16 @@ public class FilmQueryApp {
 		String languageFull = film.getLanguageName();
 		List<Actor> castOfFilm = film.getCast();
 		FilmCategory category = db.getFilmCategory(film); // <--
-
+		String categoryName = "N/A";
+		if(category != null) {
+			categoryName = category.getCategoryName();
+		}
+		
 		System.out.println(
 				" + Film Bio Information: + \n***************************************************************\n");
 		System.out.println("Film ID: " + id + "\nFilm Title: " + title + "\nFilm Language ID: " + languageId
 				+ "\nFilm Language: " + languageFull + "\nFilm Length: " + length + "\nFilm Rating: " + rating
-				+ "\nFilm Category: " + category.getCategoryName());
+				+ "\nFilm Category: " + categoryName);
 		System.out.println("\n***************************************************************\n");
 
 		System.out.println(
@@ -209,5 +232,11 @@ public class FilmQueryApp {
 		System.out.println("1: Yes");
 		System.out.println("2: No");
 	}
-
+	
+	private void subMenuToGetMoreDetailsOnOneFilmOfMany() {
+		System.out.println("Would you like to view more details about a listed film?");
+		System.out.println("1: Yes");
+		System.out.println("2: No");
+	}
 }
+
