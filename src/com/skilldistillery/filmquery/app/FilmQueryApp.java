@@ -28,8 +28,8 @@ public class FilmQueryApp {
 	private void launch() {
 		Scanner input = new Scanner(System.in);
 		System.out.println(
-				"Welcome to the \"Love My 'Rents\" (TM) video rental store movie database! \nGet information on a movie (even if we have the movie in stock!) before you even get in the car to drive to the video store!\n It's the way of the future! No other company offers this kind of movie rental convenience (not even Blockbuster)!\nEnter a choice to use the database!");
-		System.out.println("What would you like to do?");
+				"Welcome to the \"Love My 'Rents\" (TM) video rental store movie database! \nGet information on a movie (even if we have the movie in stock!) before you even get in the car to drive to the video store!\nIt's the way of the future! No other company offers this kind of movie rental convenience (not even Blockbuster)!\n\nEnter a choice to use the database!\n");
+		System.out.println("What would you like to do?\n");
 		startUserInterface(input);
 		input.close();
 	}
@@ -91,7 +91,7 @@ public class FilmQueryApp {
 				break;
 			case 3:
 				System.out.println(
-						"Thank you for using the \"Love My 'Rents\" video rental store database. We at \"Love My 'Rents\" strive to provide you the very best in video rental services.\n We at \"Love My 'Rents\" also use time-tested business strategies, and while other video rental companies are busy chasing the next shiny new fad like video streaming,\nwe at \"Love My 'Rents\" will outlast them all by continuing to provide you, the customer, with the no-nonsense video rental brick-and-mortar stores you really desire.\n\nHave a nice day!");
+						"Thank you for using the \"Love My 'Rents\" video rental store database. \nWe at \"Love My 'Rents\" strive to provide you the very best in video rental services.\nWhile other video rental companies are busy chasing the next shiny new fad like video streaming,\n\"Love My 'Rents\" will outlast them all by continuing to provide you, the customer, \nwith the no-nonsense video rental brick-and-mortar stores you really desire.\n\nHave a nice day!");
 				return;
 			default:
 				System.out.println("Please Enter a Valid Selection!");
